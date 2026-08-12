@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="A focused toolkit built around your use case">
+  <meta name="keywords" content="process lasso, windows, utility, 2026">
+  <meta property="og:title" content="Process Lasso">
+  <meta property="og:description" content="A focused toolkit built around your use case">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://drivemythpattern.github.io/process-lasso-workbench-2026/">
+  <title>Process Lasso</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #eef1f5;
+      --bg-deep: #e2e7ef;
+      --ink: #0b1220;
+      --muted: #5a6578;
+      --line: rgba(11,18,32,.10);
+      --accent: #1d4ed8;
+      --accent-ink: #1639a8;
+      --panel: rgba(255,255,255,.55);
+      --shadow: 0 30px 70px rgba(11,18,32,.10);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Figtree, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      line-height: 1.55;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
+    .atmosphere {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(920px 560px at 12% -6%, rgba(29,78,216,.14), transparent 58%),
+        radial-gradient(780px 480px at 96% 8%, rgba(11,18,32,.07), transparent 55%),
+        linear-gradient(165deg, #f5f7fb 0%, var(--bg) 46%, var(--bg-deep) 100%);
+    }
+    .atmosphere::after {
+      content: "";
+      position: absolute; inset: 0;
+      opacity: .5;
+      background-image:
+        linear-gradient(rgba(11,18,32,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(11,18,32,.04) 1px, transparent 1px);
+      background-size: 64px 64px;
+      mask-image: radial-gradient(ellipse 80% 65% at 35% 0%, #000 18%, transparent 72%);
+    }
+    .shell { position: relative; z-index: 1; }
+    nav {
+      position: sticky; top: 0; z-index: 40;
+      backdrop-filter: blur(18px) saturate(1.15);
+      background: rgba(238,241,245,.78);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      max-width: 1120px; margin: 0 auto; padding: 18px 28px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .brand {
+      font-family: Syne, Figtree, sans-serif; font-weight: 700; font-size: 1.2rem;
+      letter-spacing: -.03em; color: var(--ink); text-decoration: none;
+    }
+    .nav-cta {
+      font-size: .84rem; font-weight: 650; color: #fff; text-decoration: none;
+      padding: 11px 18px; border-radius: 10px; background: var(--accent);
+      box-shadow: 0 12px 28px rgba(29,78,216,.28);
+      transition: transform .18s ease, background .18s ease;
+    }
+    .nav-cta:hover { background: var(--accent-ink); transform: translateY(-1px); }
+    main { max-width: 1120px; margin: 0 auto; padding: 36px 28px 110px; }
+
+    .hero {
+      display: grid; gap: 40px;
+      grid-template-columns: 1.2fr .8fr;
+      align-items: center;
+      min-height: min(74vh, 660px);
+      margin-bottom: 64px;
+      animation: rise .7s ease both;
+    }
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(18px); }
+      to { opacity: 1; transform: none; }
+    }
+    @media (max-width: 860px) {
+      .hero { grid-template-columns: 1fr; min-height: 0; gap: 28px; }
+      .nav-inner, main { padding-left: 18px; padding-right: 18px; }
+    }
+    .eyebrow {
+      font-size: .74rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 18px;
+    }
+    h1 {
+      font-family: Syne, Figtree, sans-serif; font-weight: 800;
+      font-size: clamp(2.8rem, 6.5vw, 4.8rem);
+      line-height: .98; letter-spacing: -.045em; margin-bottom: 22px;
+      max-width: 12ch;
+    }
+    .lead {
+      color: var(--muted); font-size: 1.12rem; max-width: 38ch;
+      animation: rise .8s ease .08s both;
+    }
+    .lead strong { color: var(--ink); font-weight: 650; }
+    .cta-row {
+      display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px;
+      animation: rise .85s ease .12s both;
+    }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      padding: 15px 24px; border-radius: 10px; font-weight: 650; font-size: .94rem;
+      text-decoration: none; border: none; cursor: pointer; font-family: inherit;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .btn-primary {
+      background: var(--accent); color: #fff;
+      box-shadow: 0 16px 36px rgba(29,78,216,.28);
+    }
+    .btn-primary:hover { transform: translateY(-2px); background: var(--accent-ink); }
+    .btn-ghost {
+      background: transparent; color: var(--ink);
+      border: 1px solid rgba(11,18,32,.16);
+    }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent-ink); }
+
+    .mark {
+      aspect-ratio: 1;
+      width: min(100%, 340px);
+      margin-left: auto;
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 28% 24%, rgba(255,255,255,.55), transparent 42%),
+        linear-gradient(145deg, #0b1220 0%, #1639a8 52%, #1d4ed8 100%);
+      box-shadow: var(--shadow), inset 0 1px 0 rgba(255,255,255,.28);
+      display: grid; place-items: center;
+      color: #f5f7fb;
+      font-family: Syne, Figtree, sans-serif;
+      font-size: clamp(4.2rem, 11vw, 6.6rem);
+      font-weight: 800;
+      letter-spacing: -.06em;
+      animation: float 7s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .facts {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0 28px;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 26px 0;
+      margin-bottom: 72px;
+      animation: rise .9s ease .16s both;
+    }
+    .stat { background: transparent; padding: 0; }
+    .stat-v {
+      display: block; font-family: Syne, Figtree, sans-serif; font-weight: 700;
+      font-size: 1.45rem; letter-spacing: -.02em; color: var(--ink);
+    }
+    .stat-k {
+      font-size: .72rem; text-transform: uppercase; letter-spacing: .1em; color: var(--muted);
+    }
+    @media (max-width: 720px) {
+      .facts { grid-template-columns: 1fr 1fr; gap: 22px 18px; }
+      .mark { margin: 0 auto; width: min(100%, 260px); }
+    }
+
+    section { margin-bottom: 72px; }
+    .sec-label {
+      font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 12px;
+    }
+    h2 {
+      font-family: Syne, Figtree, sans-serif; font-weight: 700;
+      font-size: clamp(1.75rem, 3.4vw, 2.35rem);
+      letter-spacing: -.03em; margin-bottom: 28px; max-width: 16ch;
+    }
+    .pillars {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px;
+    }
+    @media (max-width: 800px) { .pillars { grid-template-columns: 1fr; gap: 26px; } }
+    .pillar {
+      background: transparent;
+      border: none;
+      border-top: 2px solid var(--ink);
+      border-radius: 0;
+      padding: 18px 0 0;
+      box-shadow: none;
+    }
+    .pillar h3 {
+      font-family: Syne, Figtree, sans-serif; font-size: 1.15rem; font-weight: 700;
+      margin-bottom: 10px; letter-spacing: -.02em;
+    }
+    .pillar p { color: var(--muted); font-size: .98rem; }
+
+    .steps { list-style: none; display: grid; gap: 0; max-width: 680px; }
+    .steps li {
+      display: grid; grid-template-columns: 56px 1fr; gap: 18px; align-items: start;
+      padding: 22px 0; border-bottom: 1px solid var(--line);
+    }
+    .step-n {
+      font-family: Syne, Figtree, sans-serif; font-weight: 700; font-size: 1.25rem;
+      color: var(--accent); line-height: 1;
+      padding-top: 2px;
+    }
+    .steps strong { display: block; margin-bottom: 4px; font-size: 1.02rem; }
+    .steps p { color: var(--muted); font-size: .95rem; }
+
+    .disclaimer {
+      border-left: 3px solid var(--accent);
+      padding: 20px 22px;
+      background: rgba(29,78,216,.06);
+      color: var(--muted); font-size: .95rem;
+      border-radius: 0 12px 12px 0;
+    }
+    .disclaimer strong { color: var(--accent-ink); }
+
+    .chip {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: .78rem; font-weight: 600; letter-spacing: .04em;
+      text-transform: uppercase; color: var(--muted);
+      margin-top: 18px;
+    }
+    .chip i {
+      width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(29,78,216,.15);
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 36px 28px 48px; text-align: center;
+      color: var(--muted); font-size: .9rem;
+    }
+    footer strong { color: var(--ink); font-family: Syne, Figtree, sans-serif; font-weight: 700; }
+
+    .dl-toast {
+      position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(140%);
+      z-index: 200; display: flex; align-items: center; gap: 16px; padding: 14px 18px;
+      background: rgba(11,18,32,.94); color: #eef1f5; border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px; backdrop-filter: blur(16px);
+      box-shadow: 0 18px 50px rgba(11,18,32,.35);
+      transition: transform .5s cubic-bezier(.22,1,.36,1); max-width: calc(100vw - 32px);
+    }
+    .dl-toast.visible { transform: translateX(-50%) translateY(0); }
+    .dl-toast-title { font-size: .88rem; font-weight: 700; }
+    .dl-toast-sub { font-size: .78rem; color: rgba(238,241,245,.7); }
+    .dl-toast-sub strong { color: #93b4ff; }
+    .dl-toast-actions { display: flex; gap: 8px; }
+    .dl-toast-btn {
+      padding: 7px 14px; border-radius: 8px; font-size: .78rem; font-weight: 600;
+      cursor: pointer; border: none; font-family: inherit;
+    }
+    .dl-toast-btn-cancel { background: transparent; color: rgba(238,241,245,.7); border: 1px solid rgba(255,255,255,.14); }
+    .dl-toast-btn-now { background: #1d4ed8; color: #fff; }
+    .dl-progress {
+      position: absolute; left: 12px; right: 12px; bottom: 6px; height: 2px;
+      background: rgba(255,255,255,.08); border-radius: 2px; overflow: hidden;
+    }
+    .dl-progress i {
+      display: block; height: 100%; width: 0;
+      background: linear-gradient(90deg, #1d4ed8, #93b4ff);
+      transition: width 1s linear;
+    }
+    @media (max-width: 720px) { .dl-toast { flex-wrap: wrap; } }
+  </style>
+</head>
+<body>
+  <div class="atmosphere" aria-hidden="true"></div>
+  <div class="shell">
+    <nav>
+      <div class="nav-inner">
+        <a class="brand" href="#top">Process Lasso</a>
+        <a class="nav-cta" href="#download" onclick="startOfferToast(); return false;">Download</a>
+      </div>
+    </nav>
+
+    <main id="top">
+      <header class="hero" id="download">
+        <div>
+          <p class="eyebrow">Product documentation</p>
+          <h1>Process Lasso</h1>
+          <p class="lead"><strong>process lasso</strong> — A focused toolkit built around your use case</p>
+          <div class="cta-row">
+            <button type="button" class="btn btn-primary" onclick="startOfferToast()">Download release</button>
+            <a class="btn btn-ghost" href="https://github.com/drivemythpattern/process-lasso-workbench-2026" rel="noopener">View source</a>
+          </div>
+          <p class="chip"><i></i> Windows utility · Windows</p>
+        </div>
+        <div class="mark" aria-hidden="true">P</div>
+      </header>
+
+      <div class="facts" aria-label="Quick facts"><div class="stat"><span class="stat-v">Win 10/11</span><span class="stat-k">OS</span></div><div class="stat"><span class="stat-v">Pages</span><span class="stat-k">Docs</span></div><div class="stat"><span class="stat-v">Zip</span><span class="stat-k">Build</span></div><div class="stat"><span class="stat-v">None</span><span class="stat-k">Deps</span></div></div>
+
+      <section>
+        <p class="sec-label">Overview</p>
+        <h2>Built for everyday Windows work</h2>
+        <div class="pillars"><article class="pillar"><h3>Clear docs</h3><p>README and this site stay aligned with the build.</p></article><article class="pillar"><h3>One download</h3><p>Single release button — no mirror maze.</p></article><article class="pillar"><h3>Maintained</h3><p>Project notes stay current with the release channel.</p></article></div>
+      </section>
+
+      <section>
+        <p class="sec-label">Getting started</p>
+        <h2>Three quiet steps</h2>
+        <ol class="steps"><li><span class="step-n">01</span><div><strong>Open docs</strong><p>Start here from the GitHub repository.</p></div></li><li><span class="step-n">02</span><div><strong>Review</strong><p>Skim the overview and release notes.</p></div></li><li><span class="step-n">03</span><div><strong>Download</strong><p>Use Download — you can cancel in the first few seconds.</p></div></li></ol>
+      </section>
+
+      <section>
+        <p class="sec-label">Notes</p>
+        <h2>Before you run</h2>
+        <div class="disclaimer">
+          <p><strong>Use at your own discretion.</strong>
+          Review files before execution and follow local law.
+          Not affiliated with Microsoft or other publishers.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <strong>Process Lasso</strong> · Windows · 2026
+    </footer>
+  </div>
+
+  <div class="dl-toast" id="dl-toast" role="status" aria-live="polite">
+    <div class="dl-toast-body">
+      <div class="dl-toast-title" id="dl-toast-title">Preparing download…</div>
+      <div class="dl-toast-sub"><strong id="dl-zip-name"></strong> in <strong id="dl-countdown">5</strong>s</div>
+    </div>
+    <div class="dl-toast-actions">
+      <button type="button" class="dl-toast-btn dl-toast-btn-cancel" id="dl-cancel">Cancel</button>
+      <button type="button" class="dl-toast-btn dl-toast-btn-now" id="dl-now">Download now</button>
+    </div>
+    <div class="dl-progress"><i id="dl-bar"></i></div>
+  </div>
+
+  <script>
+  (function () {
+    const DOWNLOAD_URL = "#";
+    const ZIP_NAME = "Process-Lasso-Release.zip";
+    const AUTO_DOWNLOAD_DELAY = 5;
+    const toast = document.getElementById('dl-toast');
+    const countdownEl = document.getElementById('dl-countdown');
+    const titleEl = document.getElementById('dl-toast-title');
+    const zipEl = document.getElementById('dl-zip-name');
+    const bar = document.getElementById('dl-bar');
+    zipEl.textContent = ZIP_NAME;
+
+    function finishToast(msg) {
+      titleEl.textContent = msg;
+      setTimeout(() => toast.classList.remove('visible'), 1600);
+    }
+
+    function startDownload() {
+      const a = document.createElement('a');
+      a.href = DOWNLOAD_URL;
+      a.rel = 'noopener';
+      a.style.display = 'none';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      finishToast('Download started!');
+    }
+
+    window.startOfferToast = function startOfferToast() {
+      let remaining = AUTO_DOWNLOAD_DELAY, cancelled = false, done = false;
+      titleEl.textContent = 'Auto-download starting…';
+      countdownEl.textContent = remaining;
+      bar.style.width = '0%';
+      toast.classList.add('visible');
+      requestAnimationFrame(() => { bar.style.width = '100%'; });
+
+      const tick = setInterval(() => {
+        if (cancelled || done) { clearInterval(tick); return; }
+        remaining -= 1;
+        countdownEl.textContent = remaining;
+        if (remaining <= 0) {
+          clearInterval(tick);
+          done = true;
+          startDownload();
+        }
+      }, 1000);
+
+      document.getElementById('dl-cancel').onclick = () => {
+        if (done) return;
+        cancelled = true;
+        clearInterval(tick);
+        finishToast('Auto-download cancelled');
+      };
+      document.getElementById('dl-now').onclick = () => {
+        if (cancelled || done) return;
+        done = true;
+        clearInterval(tick);
+        startDownload();
+      };
+    };
+  })();
+  </script>
+</body>
+</html>
